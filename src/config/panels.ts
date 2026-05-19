@@ -20,6 +20,7 @@ const FULL_PANELS: Record<string, PanelConfig> = {
   'live-webcams': { name: 'Live Webcams', enabled: true, priority: 1 },
   'windy-webcams': { name: 'Windy Live Webcam', enabled: false, priority: 2 },
   insights: { name: 'AI Insights', enabled: true, priority: 1 },
+  'jarvis-assistant': { name: 'JARVIS', enabled: true, priority: 1 },
   'strategic-posture': { name: 'AI Strategic Posture', enabled: true, priority: 1 },
   forecast: { name: 'AI Forecasts', enabled: true, priority: 1, ...(_desktop && { premium: 'locked' as const }) }, // trial: unlocked on web, locked on desktop
   cii: { name: 'Country Instability', enabled: true, priority: 1, ...(_desktop && { premium: 'enhanced' as const }) },
@@ -1228,7 +1229,7 @@ export const PANEL_CATEGORY_MAP: Record<string, { labelKey: string; panelKeys: s
   // All variants — essential panels
   core: {
     labelKey: 'header.panelCatCore',
-    panelKeys: ['map', 'live-news', 'live-webcams', 'windy-webcams', 'insights', 'strategic-posture'],
+    panelKeys: ['map', 'live-news', 'live-webcams', 'windy-webcams', 'insights', 'jarvis-assistant', 'strategic-posture'],
   },
 
   // Full (geopolitical) variant

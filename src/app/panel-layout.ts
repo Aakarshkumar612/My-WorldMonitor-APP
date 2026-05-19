@@ -84,6 +84,7 @@ import {
   WsbTickerScannerPanel,
   AAIISentimentPanel,
   EnergyCrisisPanel,
+  JarvisAssistant,
 } from '@/components';
 import { SatelliteFiresPanel } from '@/components/SatelliteFiresPanel';
 import { focusInvestmentOnMap } from '@/services/investments-focus';
@@ -1338,6 +1339,7 @@ export class PanelLayoutManager implements AppModule {
     }
 
     this.createPanel('insights', () => new InsightsPanel());
+    this.createPanel('jarvis-assistant', () => new JarvisAssistant({}));
 
     // Global Giving panel (all variants)
     this.lazyPanel('giving', () =>

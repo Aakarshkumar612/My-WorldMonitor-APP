@@ -46,6 +46,7 @@ type WorkerResult =
   | { type: 'sentiment-result'; id: string; results: SentimentResult[] }
   | { type: 'entities-result'; id: string; entities: NEREntity[][] }
   | { type: 'cluster-semantic-result'; id: string; clusters: number[][] }
+  | { type: 'transcribe-result'; id: string; text: string }
   | { type: 'vector-store-ingest-result'; id: string; stored: number }
   | { type: 'vector-store-search-result'; id: string; results: VectorSearchResult[] }
   | { type: 'vector-store-count-result'; id: string; count: number }
@@ -170,6 +171,8 @@ class MLWorkerManager {
               pending.resolve(true);
             } else if (data.type === 'status-result') {
               pending.resolve(data.loadedModels);
+            } else if (data.type === 'transcribe-result') {
+              pending.resolve(data.text);
             }
           }
         }
@@ -371,6 +374,14 @@ class MLWorkerManager {
   async getStatus(): Promise<string[]> {
     if (!this.isReady) return [];
     return this.request<string[]>('status', {});
+  }
+
+  /**
+   * Transcribe audio data using Whisper
+   */
+  async transcribe(audio: Float32Array): Promise<string> {
+    if (!this.isReady) throw new Error('ML Worker not ready');
+    return this.request<string>('transcribe', { audio }, ML_THRESHOLDS.inferenceTimeoutMs * 2);
   }
 
   /**

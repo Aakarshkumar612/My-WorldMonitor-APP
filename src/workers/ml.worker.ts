@@ -66,6 +66,12 @@ interface StatusMessage {
   id: string;
 }
 
+interface TranscribeMessage {
+  type: 'transcribe';
+  id: string;
+  audio: Float32Array;
+}
+
 interface ResetMessage {
   type: 'reset';
 }
@@ -110,6 +116,7 @@ type MLWorkerMessage =
   | NERMessage
   | SemanticClusterMessage
   | StatusMessage
+  | TranscribeMessage
   | ResetMessage
   | VectorStoreIngestMessage
   | VectorStoreSearchMessage
@@ -264,6 +271,13 @@ async function extractEntities(texts: string[]): Promise<NEREntity[][]> {
   }
 
   return results;
+}
+
+async function transcribeAudio(audio: Float32Array): Promise<string> {
+  await loadModel('stt');
+  const pipe = loadedPipelines.get('stt')!;
+  const output = await pipe(audio);
+  return output.text;
 }
 
 function cosineSimilarity(a: number[], b: number[]): number {
@@ -494,6 +508,16 @@ self.onmessage = async (event: MessageEvent<MLWorkerMessage>) => {
           type: 'status-result',
           id: message.id,
           loadedModels: Array.from(loadedPipelines.keys()),
+        });
+        break;
+      }
+
+      case 'transcribe': {
+        const text = await transcribeAudio(message.audio);
+        self.postMessage({
+          type: 'transcribe-result',
+          id: message.id,
+          text,
         });
         break;
       }

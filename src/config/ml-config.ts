@@ -10,10 +10,19 @@ export interface ModelConfig {
   size: number;
   priority: number;
   required: boolean;
-  task: 'feature-extraction' | 'text-classification' | 'text2text-generation' | 'token-classification';
+  task: 'feature-extraction' | 'text-classification' | 'text2text-generation' | 'token-classification' | 'automatic-speech-recognition';
 }
 
 export const MODEL_CONFIGS: ModelConfig[] = [
+  {
+    id: 'stt',
+    name: 'Whisper Tiny (EN)',
+    hfModel: 'Xenova/whisper-tiny.en',
+    size: 40_000_000,
+    priority: 5,
+    required: false,
+    task: 'automatic-speech-recognition',
+  },
   {
     id: 'embeddings',
     name: 'all-MiniLM-L6-v2',
